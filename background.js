@@ -1,27 +1,25 @@
-$(function() {
+let downloadFile = (filename, url) => {
+    chrome.downloads.download({
+        url      : url,
+        filename : filename,
+        saveAs   : false
+    });
+}
 
-    let isInstagram = () => {
-        return true;
-        var url = window.location.href;
+let downloadBlob = (filename, blob) => {
+    const url = URL.createObjectURL(blob);
+    chrome.downloads.download({
+        url      : url,
+        filename : filename,
+        saveAs   : false
+    });
+    URL.revokeObjectURL(url);
+}
 
-        if (url.contains("instagram.com"))
-            return true;
-
-        return false;
-    };
-
-
-    let init = () => {
-
-        /* check if current site is instagram */
-        /*
-        if (!isInstagram())
-            return;
-        */
-
-        $(".container").append("<button>Phil Goo Kang</button>");
-    };
-
-    init();
+chrome.runtime.onMessage.addListener( (arg, sender, sendResponse) => {
+    if (arg.action === "download") {
+        downloadFile(arg.filename, arg.url);
+    } else if (arg.action === "downloadBlob") {
+        downloadBlob(arg.filename, arg.url);
+    }
 });
-

@@ -19,6 +19,7 @@
     }],
     "permissions": [
         "activeTab",
+        "downloads",
         "debugger",
         "tabs",
         "<all_urls>",
